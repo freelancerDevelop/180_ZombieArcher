@@ -1,4 +1,4 @@
-##ZombieArcher
+## ZombieArcher
 
 ZombieArcher is a video game designed for UCLA's Capstone Couse EE 180D.
 
