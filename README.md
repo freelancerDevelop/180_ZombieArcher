@@ -14,4 +14,7 @@ The designers are Sidharth Bambah, Sparsh Gauba, Andrew Juarez, and Mohamed Shat
 
 #### How to Run Python Server:
 1. Define host IP address
-2. Run with 'python3 server.py'
+2. Run with 
+	```python
+	python3 server.py
+	```
