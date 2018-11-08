@@ -18,7 +18,6 @@ def socket_create():
 	sensor_data_socket.bind(SENSOR_DATA_ADDRESS)
 	
 	##Binding Unity socket to IP address
-	HOST = "172.29.68.81"; 
 	UNITY_PORT = 10002
 	UNITY_ADDRESS = (HOST, UNITY_PORT)
 	unity_socket.bind(UNITY_ADDRESS)

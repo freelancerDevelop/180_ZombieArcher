@@ -28,7 +28,7 @@ The designers are Sidharth Bambah, Sparsh Gauba, Andrew Juarez, and Mohamed Shat
 	```
 	
 Note: It is **critical** to start server before Pi software to properly initialize
-the UDP sockets.
+the UDP sockets. Also, UDP ports 10000 and 10002 must be opened in the firewall.
 
 Known Issues
 1. Server and Raspberry Pi software cannot be closed with Ctrl-C. Must do a hard shutdown.

@@ -37,11 +37,14 @@ def get_signal():
 		
 def main():
 	socket_create()
+	##Generate signal
 	global signal
 	signal = threading.Event()
 	signal.clear()
+	##Define threads
 	sendDataThread = threading.Thread(target = data_collect)
 	getSignalThread = threading.Thread(target = get_signal)
+	##Start threads
 	sendDataThread.start()
 	getSignalThread.start()
 	
