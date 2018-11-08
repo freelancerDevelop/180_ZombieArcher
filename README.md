@@ -15,7 +15,7 @@ The designers are Sidharth Bambah, Sparsh Gauba, Andrew Juarez, and Mohamed Shat
 2. Run with:
 
 	```python
-	python3 server.py
+	python3 data_collect.py
 	```
 	
 #### How to Run Raspberry Pi Sensor Software:
@@ -29,3 +29,6 @@ The designers are Sidharth Bambah, Sparsh Gauba, Andrew Juarez, and Mohamed Shat
 	
 Note: It is **critical** to start server before Pi software to properly initialize
 the UDP sockets.
+
+Known Issues
+1. Server and Raspberry Pi software cannot be closed with Ctrl-C. Must do a hard shutdown.
