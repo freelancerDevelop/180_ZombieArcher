@@ -1,5 +1,0 @@
-
-I will be adding code relating to the raspberry pi networking and sensor data acquisition in this branch.
-
-For the socket communication programs, we must place the correct host IP address
-each time it is run.
