@@ -1,6 +1,7 @@
 import socket
 import threading
 import time
+from IMU import berryIMU
 
 def socket_create():
 	##Creating UDP socket to send sensor data to server
@@ -9,23 +10,18 @@ def socket_create():
 
 def data_collect():
 	##Sending signals through Pi socket
-	HOST = "172.29.68.81"
+	HOST = "192.168.1.230"
 	PORT = 10000
 	ADDRESS = (HOST, PORT)
 	##Start sequence to establish connection
 	for _ in range(3):
-		sensor_socket.sendto("connect", ADDRESS)
+		sensor_socket.sendto("connect".encode(), ADDRESS)
 	##Send sensor data until stop/start signal received
 	##Keep listening until program closed
-	while True:
-		signal.wait() ## Holds here until start signal received
-		if signal.is_set():
-			sensor_socket.sendto("sensor data", ADDRESS)
+	berryIMU.collect(sensor_socket, ADDRESS, signal)
 		
 def get_signal():
 	##Grabs cue from Unity to start or stop taking sensor data
-	global sensor_socket
-	global signal
 	while True:
 		data,addr = sensor_socket.recvfrom(4096)
 		if data == "collect":
@@ -44,9 +40,14 @@ def main():
 	##Define threads
 	sendDataThread = threading.Thread(target = data_collect)
 	getSignalThread = threading.Thread(target = get_signal)
+	##Kill threads when main thread dies
+	sendDataThread.daemon = True
+	getSignalThread.daemon = True
 	##Start threads
 	sendDataThread.start()
 	getSignalThread.start()
-	
+	while True:
+		time.sleep(0.01)
+
 if __name__ == "__main__":
 	main()

@@ -15,7 +15,7 @@ The designers are Sidharth Bambah, Sparsh Gauba, Andrew Juarez, and Mohamed Shat
 2. Run with:
 
 	```python
-	python3 data_collect.py
+	python3 server.py
 	```
 	
 #### How to Run Raspberry Pi Sensor Software:
@@ -24,7 +24,7 @@ The designers are Sidharth Bambah, Sparsh Gauba, Andrew Juarez, and Mohamed Shat
 3. Run program on Pi with:
 	
 	```python
-	python3 server.py
+	python3 bow_sensors.py
 	```
 	
 Note: It is **critical** to start server before Pi software to properly initialize

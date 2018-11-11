@@ -1,6 +1,8 @@
 import socket
 import threading
-import sys
+import os
+import signal
+import time
 
 def socket_create():
 	##Creating UDP socket to receive sensor data
@@ -12,7 +14,7 @@ def socket_create():
 	unity_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 	##Binding sensor data socket to IP address
-	HOST = "172.29.68.81"; 
+	HOST = "192.168.1.230"
 	SENSOR_DATA_PORT = 10000
 	SENSOR_DATA_ADDRESS = (HOST, SENSOR_DATA_PORT)
 	sensor_data_socket.bind(SENSOR_DATA_ADDRESS)
@@ -32,14 +34,13 @@ def pi_communicate():
 			##Send stop signal if no more data is needed now
 			##Sending 3 to be safe
 			for _ in range(3):
-				sensor_data_socket.sendto("stop", addr)
+				sensor_data_socket.sendto("stop".encode(), addr)
 		signal.wait()
 		if signal.is_set():
 			##Send start signal to collect more data
 			for _ in range(3):
-				sensor_data_socket.sendto("collect", addr)
-	
-	
+				sensor_data_socket.sendto("collect".encode(), addr)
+				
 def unity_communicate():
 	while True:
 		##Get signal from Unity
@@ -55,17 +56,21 @@ def camera_communication():
 	print("test")
 	
 def main():
+	##Create sockets
 	socket_create()
+	##Create signal
 	global signal
 	signal = threading.Event()
 	signal.clear()
 	##Define threads
 	piThread = threading.Thread(target = pi_communicate)
 	unityThread = threading.Thread(target = unity_communicate)
+	piThread.daemon = True
+	unityThread.daemon = True
 	##Start threads
 	piThread.start()
 	unityThread.start()
-	
-	
+	while True:
+		time.sleep(0.01)
 if __name__ == "__main__":
 	main()
