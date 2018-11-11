@@ -28,7 +28,6 @@ def get_signal():
 			signal.set()
 		elif data == "stop":
 			signal.clear()
-		print(data)
 		data = None
 		
 def main():
