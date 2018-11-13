@@ -2,17 +2,32 @@ import socket
 import threading
 import time
 from IMU import berryIMU
+import fcntl
+import struct
+
+def get_ip_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
 
 def socket_create():
 	##Creating UDP socket to send sensor data to server
 	global sensor_socket
 	sensor_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
+	##Binding sensor data socket to IP address
+	HOST = get_ip_address('wlan0')
+	SENSOR_PORT = 10000
+	SENSOR_ADDRESS = (HOST, SENSOR_PORT)
+	sensor_socket.bind(SENSOR_ADDRESS)
+	
 def data_collect():
 	##Sending signals through Pi socket
-	HOST = "192.168.1.230"
 	PORT = 10000
-	ADDRESS = (HOST, PORT)
+	SERVER_ADDRESS = "172.29.70.132"
+	ADDRESS = (SERVER_ADDRESS, PORT)
 	##Start sequence to establish connection
 	for _ in range(3):
 		sensor_socket.sendto("connect".encode(), ADDRESS)
@@ -24,11 +39,11 @@ def get_signal():
 	##Grabs cue from Unity to start or stop taking sensor data
 	while True:
 		data,addr = sensor_socket.recvfrom(4096)
+		print (data.decode())
 		if data == "collect":
 			signal.set()
 		elif data == "stop":
 			signal.clear()
-		data = None
 		
 def main():
 	socket_create()

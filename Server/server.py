@@ -4,7 +4,18 @@ import os
 import signal
 import time
 import Queue
+import fcntl
+import struct
 
+
+def get_ip_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
+	
 def socket_create():
 	##Creating UDP socket to receive sensor data
 	global sensor_data_socket 
@@ -15,7 +26,8 @@ def socket_create():
 	unity_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 	##Binding sensor data socket to IP address
-	HOST = "192.168.1.230"
+	##HOST = "172.29.70.132" alternative
+	HOST = get_ip_address('wifi0')
 	SENSOR_DATA_PORT = 10000
 	SENSOR_DATA_ADDRESS = (HOST, SENSOR_DATA_PORT)
 	sensor_data_socket.bind(SENSOR_DATA_ADDRESS)
@@ -31,6 +43,7 @@ def pi_communicate():
 		data,addr = sensor_data_socket.recvfrom(4096)
 		##Send received data to Unity over socket
 		if unityClientAddress is not None:
+			print (data.decode()) ##Print the data for debugging purposes
 			unity_socket.sendto(data, unityClientAddress)
 		if not signal.is_set():
 			##Send stop signal if no more data is needed now

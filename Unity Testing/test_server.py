@@ -4,7 +4,7 @@ import socket
 global unity_socket
 unity_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 ##Binding Unity socket to IP address
-HOST = "172.29.69.39"
+HOST = "172.29.70.132"
 UNITY_PORT = 10002
 UNITY_ADDRESS = (HOST, UNITY_PORT)
 unity_socket.bind(UNITY_ADDRESS)
