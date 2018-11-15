@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 public class PositionManipulate : MonoBehaviour {
 	//Variable Definitions
-	private string HOST = "172.29.70.132"; //Must change this each time
+	private string HOST = "131.179.27.118"; //Must change this each time
 	int PORT = 10002;
 	UdpClient unity_socket;
 	IPEndPoint ep;

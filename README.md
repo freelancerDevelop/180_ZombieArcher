@@ -32,4 +32,4 @@ Note: It is **critical** to start server before Pi and Unity software to properl
 the UDP sockets. Also, UDP ports 10000 and 10002 must be opened in the firewall.
 
 Known Issues
-1. Server and Raspberry Pi software cannot be closed with Ctrl-C. Must do a hard shutdown.
+1. Unity client freezes if data collection is stopped externally
