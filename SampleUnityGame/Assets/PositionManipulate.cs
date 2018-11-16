@@ -53,6 +53,7 @@ public class PositionManipulate : MonoBehaviour {
 	void Start () {
 		//Create socket
 		createSocket();
+		//Always be on "ON" mode for testing purposes
 		sendSignal("collect");
 	}
 	

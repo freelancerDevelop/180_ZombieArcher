@@ -72,6 +72,10 @@ def camera_communication():
 	##Take camera data here
 	print("test")
 	
+def speech_communication():
+	##Do speech recognition here
+	print("test")
+	
 def main():
 	##Create sockets
 	socket_create()
