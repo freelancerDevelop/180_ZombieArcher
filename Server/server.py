@@ -27,7 +27,7 @@ def socket_create():
 
 	##Binding sensor data socket to IP address
 	##HOST = "172.29.70.132" alternative
-	HOST = get_ip_address('wifi0')
+	HOST = get_ip_address('enp0s3')
 	SENSOR_DATA_PORT = 10000
 	SENSOR_DATA_ADDRESS = (HOST, SENSOR_DATA_PORT)
 	sensor_data_socket.bind(SENSOR_DATA_ADDRESS)

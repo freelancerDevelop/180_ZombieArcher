@@ -8,10 +8,10 @@ The designers are Sidharth Bambah, Sparsh Gauba, Andrew Juarez, and Mohamed Shat
 ### Main Components:
 1) Unity Game
 2) Raspberry Pi Sensor Software
-3) Python Server
+3) Python Server (including OpenCV software and Speech Recognition)
 
 #### How to Run Python Server:
-1. Define host IP address in HOST definition if not wifi0
+1. Define wireless interface name in HOST definition if not wifi0
 2. Run with:
 
 	```python
