@@ -13,6 +13,9 @@ public class PositionManipulate : MonoBehaviour {
 	int PORT = 10002;
 	UdpClient unity_socket;
 	IPEndPoint ep;
+	private float previous_force = 0;
+	public float current_force = 0;
+	public bool isFired = False;
 	
 	private void sendSignal(string signal) {
 		Byte[] message = Encoding.ASCII.GetBytes(signal);
@@ -35,13 +38,12 @@ public class PositionManipulate : MonoBehaviour {
 		return responseAsString;
 	}
 	
-	private void moveBow(JObject coordinates) {
+	private void moveBow(JObject package) {
 		float smooth = 5.0f;
 		float tiltAngle = 60.0f;
 		// Smoothly tilts a transform towards a target rotation.
-        float tiltAroundX = coordinates["x-angle"].Value<float>();
-        float tiltAroundY = coordinates["y-angle"].Value<float>();
-		Debug.Log(tiltAroundX);
+        float tiltAroundX = package["y-angle"].Value<float>();
+        float tiltAroundY = package["z-angle"].Value<float>();
         Quaternion target = Quaternion.Euler(tiltAroundX, tiltAroundY, 0);
 
         // Dampen towards the target rotation
@@ -60,7 +62,14 @@ public class PositionManipulate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		string responseAsString = getResponse();
-		JObject coordinates = JObject.Parse(responseAsString);
-		moveBow(coordinates);
+		JObject package = JObject.Parse(responseAsString);
+		moveBow(package);
+		float force = package["force"].Value<float>();
+		Debug.Log(force);
+		previous_force = current;
+		current_force = force;
+		if(current_force - previous_force < -0.5){
+			isFired = True;
+		}
 	}
 }

@@ -24,8 +24,24 @@ import IMU
 import datetime
 import os
 import json
+# Import SPI library (for hardware SPI) and MCP3008 library.                                                                                                  
+import Adafruit_GPIO.SPI as SPI
+import Adafruit_MCP3008
 
 def collect(sensor_socket, ADDRESS, signal):
+
+    ##Force Sensor Configuration
+    # Software SPI configuration:                                                                                                                                 
+    CLK  = 18
+    MISO = 23
+    MOSI = 24
+    CS   = 25
+    mcp = Adafruit_MCP3008.MCP3008(clk=CLK, cs=CS, miso=MISO, mosi=MOSI)
+    threshold = 250
+    gamma = 1.5
+    max_limit = 999.0
+    force_val = 0.0
+    
     # If the IMU is upside down (Skull logo facing up), change this value to 1
     IMU_UPSIDE_DOWN = 0	
 
@@ -153,10 +169,17 @@ def collect(sensor_socket, ADDRESS, signal):
         #Complementary filter used to combine the accelerometer and gyro values.
         CFangleX=AA*(CFangleX+rate_gyr_x*LP) +(1 - AA) * AccXangle
         CFangleY=AA*(CFangleY+rate_gyr_y*LP) +(1 - AA) * AccYangle
+		
+        #Collect force sensor data
+        value = mcp.read_adc(0)
+        if value <= threshold:
+            force_val = 0.0
+        else:
+            force_val = ((value - threshold)/(max_limit - threshold))**gamma
 
         ############################ END ##################################
-        #Package angles into JSON and output as string
-        package = {"y-angle": CFangleX, "z-angle": CFangleY}
+        #Package angles and force sensor data into JSON and output as string
+        package = {"y-angle": CFangleX, "z-angle": CFangleY, "force": force_val}
         package_string = json.dumps(package)
         
         #Send package over socket
