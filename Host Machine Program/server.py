@@ -6,7 +6,8 @@ import time
 import Queue
 import fcntl
 import struct
-
+import speech_processing
+import json
 
 def get_ip_address(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -37,12 +38,13 @@ def socket_create():
 	UNITY_ADDRESS = (HOST, UNITY_PORT)
 	unity_socket.bind(UNITY_ADDRESS)
 	
-def pi_communicate():
+def client_communicate():
 	while True:
 	##Receiving sensor data from Pi
 		data,addr = sensor_data_socket.recvfrom(4096)
-		##Send received data to Unity over socket
+		##Send received data to Unity over socket after adding in Speech Recognition data
 		if unityClientAddress is not None:
+			
 			print (data.decode()) ##Print the data for debugging purposes
 			unity_socket.sendto(data, unityClientAddress)
 		if not signal.is_set():
@@ -72,9 +74,12 @@ def camera_communication():
 	##Take camera data here
 	print("test")
 	
-def speech_communication():
+def speech_recognition():
+	##Instantiate microphone and recognizer
+	speech_processing.speech_initialize()
 	##Do speech recognition here
-	print("test")
+	speech_processing.recognize()
+	print(speech_processing.speechValue)
 	
 def main():
 	##Create sockets
@@ -84,13 +89,17 @@ def main():
 	signal = threading.Event()
 	signal.clear()
 	##Define threads
-	piThread = threading.Thread(target = pi_communicate)
+	clientThread = threading.Thread(target = client_communicate)
 	unityThread = threading.Thread(target = unity_communicate)
-	piThread.daemon = True
+	speechRecognitionThread = threading.Thread(target = speech_recognition)
+	##Close threads when main thread ends
+	clientThread.daemon = True
 	unityThread.daemon = True
+	speechRecognitionThread.daemon = True
 	##Start threads
-	piThread.start()
+	clientThread.start()
 	unityThread.start()
+	speechRecognitionThread.start()
 	while True:
 		time.sleep(0.01)
 		
