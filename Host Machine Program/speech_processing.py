@@ -21,25 +21,6 @@ def speech_initialize():
 		recognizer.adjust_for_ambient_noise(source)
 	#Sets a 2 second time limit for phrases
 	recognizer.phrase_time_limit = 2
-'''
-def recognize():
-	#Continuously recognize keywords here
-	while True:
-		with mic as source:
-			audio = recognizer.listen(source)
-		try:
-		# for testing purposes, we're just using the default API key
-		# to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-		# instead of `r.recognize_google(audio)`
-			print("Google Speech Recognition thinks you said " + recognizer.recognize_google(audio))
-			if recognizer.recognize_google(audio) == "start" or recognizer.recognize_google(audio) == "stop":
-				speechValue =  recognizer.recognize_google(audio)
-				print("speechValue is now " + speechValue)
-		except sr.UnknownValueError:
-			print("Google Speech Recognition could not understand audio")
-		except sr.RequestError as e:
-			print("Could not request results from Google Speech Recognition service; {0}".format(e))
-'''
 
 def listen():
 	#Continuously listen to audio and put it on the audioQueue
