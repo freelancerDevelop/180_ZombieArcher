@@ -9,13 +9,13 @@ using Newtonsoft.Json.Linq;
 
 public class PositionManipulate : MonoBehaviour {
 	//Variable Definitions
-	private string HOST = "131.179.27.118"; //Must change this each time
+	private string HOST = "131.179.27.135"; //Must change this each time
 	int PORT = 10002;
 	UdpClient unity_socket;
 	IPEndPoint ep;
 	private float previous_force = 0;
 	public float current_force = 0;
-	public bool isFired = False;
+	public bool isFired = false;
 	
 	private void sendSignal(string signal) {
 		Byte[] message = Encoding.ASCII.GetBytes(signal);
@@ -40,7 +40,7 @@ public class PositionManipulate : MonoBehaviour {
 	
 	private void moveBow(JObject package) {
 		float smooth = 5.0f;
-		float tiltAngle = 60.0f;
+		//float tiltAngle = 60.0f;
 		// Smoothly tilts a transform towards a target rotation.
         float tiltAroundX = package["y-angle"].Value<float>();
         float tiltAroundY = package["z-angle"].Value<float>();
@@ -65,11 +65,12 @@ public class PositionManipulate : MonoBehaviour {
 		JObject package = JObject.Parse(responseAsString);
 		moveBow(package);
 		float force = package["force"].Value<float>();
-		Debug.Log(force);
-		previous_force = current;
+		previous_force = current_force;
 		current_force = force;
 		if(current_force - previous_force < -0.5){
-			isFired = True;
+			isFired = true;
 		}
+        //Debug.Log("FORCE: " + force);
+        Debug.Log("isFired: " + isFired);
 	}
 }
