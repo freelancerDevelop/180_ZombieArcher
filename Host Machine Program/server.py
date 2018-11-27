@@ -70,7 +70,7 @@ def unity_communicate():
 			signal.clear()
 	
 	
-def camera_communication():
+def image_processing():
 	##Take camera data here
 	print("test")
 	
@@ -92,14 +92,18 @@ def main():
 	clientThread = threading.Thread(target = client_communicate)
 	unityThread = threading.Thread(target = unity_communicate)
 	speechRecognitionThread = threading.Thread(target = speech_recognition)
+	imageProcessingThread = threading.Thread(target = image_processing)
 	##Close threads when main thread ends
 	clientThread.daemon = True
 	unityThread.daemon = True
 	speechRecognitionThread.daemon = True
+	imageProcessingThread.daemon = True
 	##Start threads
 	clientThread.start()
 	unityThread.start()
 	speechRecognitionThread.start()
+	imageProcessingThread.start()
+	##Keep main thread alive
 	while True:
 		time.sleep(0.01)
 		
