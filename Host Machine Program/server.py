@@ -27,7 +27,6 @@ def socket_create():
 	unity_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 	##Binding sensor data socket to IP address
-	##HOST = "172.29.70.132" alternative
 	HOST = get_ip_address('enp0s3')
 	SENSOR_DATA_PORT = 10000
 	SENSOR_DATA_ADDRESS = (HOST, SENSOR_DATA_PORT)
@@ -42,10 +41,15 @@ def client_communicate():
 	while True:
 	##Receiving sensor data from Pi
 		data,addr = sensor_data_socket.recvfrom(4096)
-		##Send received data to Unity over socket after adding in Speech Recognition data
-		if unityClientAddress is not None:
-			
-			print (data.decode()) ##Print the data for debugging purposes
+		##Send received data to Unity over socket after adding in Speech Recognition and Image Processing data
+		if unityClientAddress is not None and data[0] is '{':
+			##Convert JSON string to Python dictionary
+			data = json.loads(data)
+			##Add speech processing and image processing information
+			data['speech'] = speech_processing.speechValue
+			##Convert back to python and send
+			data = json.dumps(data)
+			print (data) ##Print the data for debugging purposes
 			unity_socket.sendto(data, unityClientAddress)
 		if not signal.is_set():
 			##Send stop signal if no more data is needed now
@@ -79,7 +83,6 @@ def speech_recognition():
 	speech_processing.speech_initialize()
 	##Do speech recognition here
 	speech_processing.recognize()
-	print(speech_processing.speechValue)
 	
 def main():
 	##Create sockets

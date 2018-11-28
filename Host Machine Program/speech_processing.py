@@ -33,6 +33,7 @@ def listen():
 def recognize():
 	#Define signal to hold while loop when there is nothing to process
 	global signal
+	global speechValue
 	signal = threading.Event()
 	#Define and begin thread to run listen()
 	listenThread = threading.Thread(target = listen)
@@ -47,9 +48,8 @@ def recognize():
 		# to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
 		# instead of `r.recognize_google(audio)`
 			print("Google Speech Recognition thinks you said " + recognizer.recognize_google(audio))
-			if recognizer.recognize_google(audio) == "start" or recognizer.recognize_google(audio) == "stop":
+			if recognizer.recognize_google(audio) == "play" or recognizer.recognize_google(audio) == "pause":
 				speechValue =  recognizer.recognize_google(audio)
-				print("speechValue is now " + speechValue)
 		except sr.UnknownValueError:
 			print("Google Speech Recognition could not understand audio")
 		except sr.RequestError as e:

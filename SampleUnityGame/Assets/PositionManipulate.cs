@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 public class PositionManipulate : MonoBehaviour {
 	//Variable Definitions
-	private string HOST = "131.179.27.135"; //Must change this each time
+	private string HOST = "172.29.69.249"; //Must change this each time
 	int PORT = 10002;
 	UdpClient unity_socket;
 	IPEndPoint ep;
@@ -42,8 +42,8 @@ public class PositionManipulate : MonoBehaviour {
 		float smooth = 5.0f;
 		//float tiltAngle = 60.0f;
 		// Smoothly tilts a transform towards a target rotation.
-        float tiltAroundX = package["y-angle"].Value<float>();
-        float tiltAroundY = package["z-angle"].Value<float>();
+        float tiltAroundX = package["angle3"].Value<float>();
+        float tiltAroundY = package["angle2"].Value<float>();
         Quaternion target = Quaternion.Euler(tiltAroundX, tiltAroundY, 0);
 
         // Dampen towards the target rotation
@@ -70,7 +70,7 @@ public class PositionManipulate : MonoBehaviour {
 		if(current_force - previous_force < -0.5){
 			isFired = true;
 		}
-        //Debug.Log("FORCE: " + force);
+        Debug.Log("FORCE: " + force);
         Debug.Log("isFired: " + isFired);
 	}
 }
