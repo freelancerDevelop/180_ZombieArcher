@@ -80,7 +80,7 @@ def image_processing():
 	
 def speech_recognition():
 	##Instantiate microphone and recognizer
-	speech_processing.speech_initialize()
+	##speech_processing.speech_initialize()
 	##Do speech recognition here
 	speech_processing.recognize()
 	
